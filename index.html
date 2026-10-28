@@ -1,43 +1,525 @@
-<html> 
-    <header>
-        <title>Proof das man auch ohne KI kann</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    </header>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Reset Your Mind | 9D Breathwork in Köln</title>
+<meta name="description" content="9D Breathwork in Köln: geführte Atemreise mit immersivem 9D-Sound im YOMA Köln. Jetzt Session buchen.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #04070c;
+    --text: #f4f1f6;
+    --muted: #b4aebd;
+    --accent: #29c4ff;
+    --blue: #1a73ff;
+    --line: rgba(255,255,255,.13);
+    /* HIER OPTIONAL EIN HERO-FOTO EINTRAGEN (ohne Text im Bild), z. B. url('hero.jpg') */
+    --hero-image: none;
+    --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+    --font-head: 'Montserrat', 'Inter', system-ui, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-body); line-height: 1.65; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  a { color: inherit; text-decoration: none; }
 
-    <body class="container d-flex justify-content-center align-items-center bg-dark">
-        <div id="Quiz-container" class="card">
-            <div class="card-header">
-                  <h1 id="question"></h1>
+  /* ---------- Header ---------- */
+  .header { position: fixed; inset: 0 0 auto 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; padding: 20px clamp(20px, 5vw, 64px); transition: background .3s, padding .3s; }
+  .header.scrolled { background: rgba(4,7,12,.8); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); padding-top: 13px; padding-bottom: 13px; border-bottom: 1px solid var(--line); }
+  .logo { display: flex; align-items: center; gap: 12px; font-family: var(--font-head); font-size: 1.05rem; font-weight: 700; letter-spacing: .04em; line-height: 1.15; text-transform: uppercase; }
+  .logo small { display: block; font-size: .6rem; font-weight: 500; letter-spacing: .22em; color: var(--accent); }
+  .logo i { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font: 600 .8rem var(--font-body); font-style: normal; background: linear-gradient(135deg, var(--blue), var(--accent)); color: #fff; box-shadow: 0 0 22px rgba(41,196,255,.55); }
+  .nav { display: flex; align-items: center; gap: 32px; }
+  .nav a.link { font-size: .84rem; color: var(--muted); letter-spacing: .04em; position: relative; padding: 6px 0; transition: color .2s; }
+  .nav a.link::after { content: ""; position: absolute; left: 0; bottom: 0; width: 0; height: 1px; background: var(--accent); transition: width .3s; }
+  .nav a.link:hover { color: var(--text); }
+  .nav a.link:hover::after { width: 100%; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 15px 32px; border-radius: 999px; font-size: .88rem; font-weight: 500; letter-spacing: .04em; border: 1px solid transparent; cursor: pointer; transition: transform .25s, box-shadow .25s, background .25s, border-color .25s; }
+  .btn.primary { background: linear-gradient(135deg, var(--blue), var(--accent)); background-size: 140% 100%; color: #fff; box-shadow: 0 10px 40px -10px rgba(41,196,255,.7); }
+  .btn.primary:hover { transform: translateY(-3px); background-position: 100% 0; box-shadow: 0 16px 50px -10px rgba(41,196,255,.85); }
+  .btn.ghost { border-color: var(--line); color: var(--text); background: rgba(255,255,255,.03); }
+  .btn.ghost:hover { border-color: rgba(255,255,255,.4); background: rgba(255,255,255,.08); transform: translateY(-3px); }
+  .header .btn { padding: 11px 24px; font-size: .8rem; }
+  .burger { display: none; background: none; border: 0; width: 28px; height: 20px; position: relative; cursor: pointer; z-index: 60; }
+  .burger span { position: absolute; left: 0; width: 100%; height: 2px; background: var(--text); transition: transform .3s, opacity .3s, top .3s; }
+  .burger span:nth-child(1) { top: 0; } .burger span:nth-child(2) { top: 9px; } .burger span:nth-child(3) { top: 18px; }
+  .burger.open span:nth-child(1) { top: 9px; transform: rotate(45deg); }
+  .burger.open span:nth-child(2) { opacity: 0; }
+  .burger.open span:nth-child(3) { top: 9px; transform: rotate(-45deg); }
 
-            </div>
-            <div class="card-body">
-                <div id="answers"></div>
+  /* ---------- Hero ---------- */
+  .hero { position: relative; min-height: 100vh; min-height: 100svh; display: flex; align-items: center; padding: 130px clamp(20px, 5vw, 64px) 140px; overflow: hidden; isolation: isolate; }
+  .hero::before { content: ""; position: absolute; inset: 0; z-index: -2;
+    background: var(--hero-image) center/cover no-repeat,
+      radial-gradient(60% 55% at 80% 30%, rgba(26,115,255,.34), transparent 70%),
+      radial-gradient(70% 55% at 10% 100%, rgba(41,196,255,.22), transparent 70%),
+      var(--bg); }
+  .hero::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(4,7,12,.7), rgba(4,7,12,.15) 60%), linear-gradient(0deg, var(--bg), transparent 30%); }
+  .hero-grid { max-width: 1240px; width: 100%; margin: 0 auto; display: grid; grid-template-columns: 1.15fr .85fr; gap: clamp(30px, 5vw, 80px); align-items: center; }
+  .badge { display: inline-flex; align-items: center; gap: 12px; padding: 8px 18px 8px 12px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,.05); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); font-size: .8rem; color: var(--muted); margin-bottom: 30px; }
+  .badge b { color: var(--text); font-weight: 500; }
+  .badge .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 0 rgba(41,196,255,.7); animation: pulse 2s infinite; }
+  @keyframes pulse { 70% { box-shadow: 0 0 0 10px rgba(41,196,255,0); } 100% { box-shadow: 0 0 0 0 rgba(41,196,255,0); } }
+  h1 { font-family: var(--font-head); font-weight: 700; line-height: 1.04; font-size: clamp(2.5rem, 6.2vw, 5rem); letter-spacing: -.025em; }
+  h1 em { display: block; font-style: normal; margin-top: .1em; background: linear-gradient(100deg, var(--accent), var(--blue)); -webkit-background-clip: text; background-clip: text; color: transparent; padding-bottom: .08em; }
+  .lead { max-width: 540px; margin-top: 28px; font-size: clamp(1.02rem, 1.4vw, 1.2rem); font-weight: 300; color: var(--muted); }
+  .lead b { color: var(--text); font-weight: 400; }
+  .cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 38px; }
+  .trust { display: flex; align-items: center; gap: 10px; margin-top: 26px; font-size: .85rem; font-weight: 500; }
+  .trust svg { width: 22px; height: 22px; fill: var(--accent); }
+  .trust span { color: var(--muted); font-weight: 400; }
+  .note { margin-top: 18px; font-size: .8rem; color: var(--muted); display: flex; align-items: center; gap: 10px; }
+  .note::before { content: ""; width: 28px; height: 1px; background: var(--muted); }
 
-            </div>
-            <div class="card-footer">
-                <button id="next-button" class="btn btn-primary" onclick="nextQuestion()"> Naechste Frage</button>
+  /* Atem-Orb */
+  .orb-wrap { position: relative; display: grid; place-items: center; aspect-ratio: 1; width: min(100%, 460px); margin-inline: auto; }
+  .ring { position: absolute; border-radius: 50%; inset: 0; border: 1px solid rgba(255,255,255,.14); animation: breathe 8s ease-in-out infinite; }
+  .ring:nth-child(2) { inset: 9%; animation-delay: .25s; border-color: rgba(41,196,255,.4); }
+  .ring:nth-child(3) { inset: 18%; animation-delay: .5s; border-color: rgba(26,115,255,.55); }
+  .orb { position: relative; width: 56%; aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center; text-align: center;
+    background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.35), transparent 35%), radial-gradient(circle at 50% 50%, var(--accent), var(--blue) 70%, #0a2a7a);
+    box-shadow: 0 0 90px 10px rgba(41,196,255,.4), 0 0 170px 30px rgba(26,115,255,.3), inset 0 0 40px rgba(255,255,255,.25);
+    animation: breathe 8s ease-in-out infinite; }
+  .orb span { font-family: var(--font-head); font-weight: 600; letter-spacing: .04em; font-size: clamp(1.1rem, 2vw, 1.5rem); text-shadow: 0 2px 20px rgba(0,0,0,.4); transition: opacity .6s; }
+  @keyframes breathe { 0%, 100% { transform: scale(.82); } 50% { transform: scale(1.06); } }
 
-            </div>
-          
+  /* Fakten-Leiste */
+  .facts { position: absolute; left: clamp(20px, 5vw, 64px); right: clamp(20px, 5vw, 64px); bottom: 32px; max-width: 1240px; margin-inline: auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; padding-top: 22px; border-top: 1px solid var(--line); }
+  .facts div small { display: block; font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); }
+  .facts div span { font-size: .95rem; }
+
+  .reveal { opacity: 0; transform: translateY(24px); animation: up .9s cubic-bezier(.2,.7,.2,1) forwards; }
+  .d1 { animation-delay: .1s; } .d2 { animation-delay: .25s; } .d3 { animation-delay: .4s; } .d4 { animation-delay: .55s; }
+  @keyframes up { to { opacity: 1; transform: none; } }
+
+  /* ---------- Sektion 2: Was ist 9D Breathwork? ---------- */
+  .section { padding: clamp(80px, 11vw, 150px) clamp(20px, 5vw, 64px); }
+  .wrap { max-width: 1240px; margin: 0 auto; }
+  .kicker { display: inline-flex; align-items: center; gap: 14px; font-size: .76rem; font-weight: 600; letter-spacing: .24em; text-transform: uppercase; color: var(--accent); margin-bottom: 22px; }
+  .kicker::before { content: ""; width: 40px; height: 1px; background: var(--accent); }
+  h2 { font-family: var(--font-head); font-weight: 700; line-height: 1.1; letter-spacing: -.02em; font-size: clamp(2rem, 4.6vw, 3.6rem); }
+  h2 em { font-style: normal; color: var(--accent); }
+  .what { position: relative; background: linear-gradient(180deg, var(--bg), #060c15 40%, var(--bg)); border-top: 1px solid var(--line); }
+  .what-top { display: grid; grid-template-columns: 1.05fr .95fr; gap: clamp(36px, 6vw, 96px); align-items: center; }
+  .what-text p { color: var(--muted); font-weight: 300; font-size: 1.06rem; margin-top: 22px; max-width: 560px; }
+  .what-text p b { color: var(--text); font-weight: 500; }
+  .what-text .btn { margin-top: 34px; }
+
+  .space { position: relative; width: min(100%, 470px); aspect-ratio: 1; margin-inline: auto; }
+  .space svg { width: 100%; height: 100%; overflow: visible; }
+  .space .glow { position: absolute; inset: 22%; border-radius: 50%; background: radial-gradient(circle, rgba(41,196,255,.38), transparent 70%); filter: blur(28px); animation: breathe 8s ease-in-out infinite; }
+  .orbit { transform-origin: 200px 200px; animation: spin linear infinite; }
+  .orbit.o1 { animation-duration: 14s; } .orbit.o2 { animation-duration: 22s; animation-direction: reverse; } .orbit.o3 { animation-duration: 32s; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .space .cap { position: absolute; left: 50%; bottom: -6px; transform: translateX(-50%); font-size: .72rem; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+
+  .pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: clamp(56px, 8vw, 100px); }
+  .pillar { position: relative; padding: 38px 32px 34px; border: 1px solid var(--line); border-radius: 20px; background: linear-gradient(160deg, rgba(26,115,255,.10), rgba(255,255,255,.02) 55%); overflow: hidden; transition: transform .35s, border-color .35s, box-shadow .35s; }
+  .pillar:hover { transform: translateY(-8px); border-color: rgba(41,196,255,.55); box-shadow: 0 24px 60px -30px rgba(41,196,255,.6); }
+  .pillar .no { position: absolute; top: 18px; right: 26px; font: 800 3.4rem var(--font-head); color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,.12); }
+  .pillar .ico { width: 84px; height: 84px; margin-bottom: 26px; }
+  .pillar .ico svg { width: 100%; height: 100%; fill: none; stroke: var(--accent); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .pillar h3 { font-family: var(--font-head); font-weight: 600; font-size: 1.3rem; letter-spacing: -.01em; margin-bottom: 12px; }
+  .pillar p { color: var(--muted); font-weight: 300; font-size: .98rem; }
+  .pulse-ring { transform-origin: center; animation: ringpulse 4s ease-in-out infinite; }
+  .pulse-ring.r2 { animation-delay: .5s; } .pulse-ring.r3 { animation-delay: 1s; }
+  @keyframes ringpulse { 0%, 100% { transform: scale(.85); opacity: .4; } 50% { transform: scale(1.05); opacity: 1; } }
+  .wavebar { transform-box: fill-box; transform-origin: center; animation: bar 1.6s ease-in-out infinite; }
+  @keyframes bar { 0%, 100% { transform: scaleY(.35); } 50% { transform: scaleY(1); } }
+
+  .hint { display: flex; gap: 16px; align-items: flex-start; margin-top: 36px; padding: 22px 26px; border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 12px; background: rgba(255,255,255,.03); color: var(--muted); font-size: .92rem; font-weight: 300; }
+  .hint b { color: var(--text); font-weight: 500; }
+  .hint a { color: var(--accent); border-bottom: 1px solid currentColor; }
+
+  .scroll-reveal { opacity: 0; transform: translateY(30px); transition: opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1); }
+  .scroll-reveal.in { opacity: 1; transform: none; }
+  .scroll-reveal.s2 { transition-delay: .12s; } .scroll-reveal.s3 { transition-delay: .24s; }
+  @media (max-width: 1000px) { .what-top { grid-template-columns: 1fr; } .pillars { grid-template-columns: 1fr; } }
+  @media (prefers-reduced-motion: reduce) { .scroll-reveal { opacity: 1; transform: none; transition: none; } .orbit, .pulse-ring, .wavebar, .space .glow { animation: none; } }
+
+  /* ---------- Sektion 3: Ablauf ---------- */
+  .flow-head { max-width: 720px; margin: 0 auto clamp(40px, 6vw, 70px); text-align: center; }
+  .flow-head .kicker::before { display: none; }
+  .flow-head p { color: var(--muted); font-weight: 300; margin-top: 20px; }
+  .infobar { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line); border-radius: 18px; background: rgba(255,255,255,.03); margin-bottom: clamp(56px, 8vw, 100px); overflow: hidden; }
+  .infobar div { padding: 22px 24px; }
+  .infobar div + div { border-left: 1px solid var(--line); }
+  .infobar small { display: block; font-size: .68rem; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+  .infobar span { font-size: .95rem; }
+
+  .tl { position: relative; list-style: none; --p: 0; }
+  .tl::before, .tl::after { content: ""; position: absolute; left: 50%; top: 20px; bottom: 20px; width: 2px; transform: translateX(-50%); background: var(--line); }
+  .tl::after { bottom: auto; height: calc((100% - 40px) * var(--p)); background: linear-gradient(180deg, var(--blue), var(--accent)); box-shadow: 0 0 18px rgba(41,196,255,.7); transition: height .15s linear; }
+  .fstep { position: relative; display: grid; grid-template-columns: 1fr 72px 1fr; align-items: center; padding: 28px 0; }
+  .fstep .ft { padding-right: clamp(10px, 3vw, 40px); }
+  .fstep .node { order: 2; justify-self: center; z-index: 1; width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; font: 700 1rem var(--font-head); background: var(--bg); border: 2px solid var(--line); color: var(--muted); transition: all .4s; }
+  .fstep.on .node { border-color: var(--accent); color: #fff; background: linear-gradient(135deg, var(--blue), var(--accent)); box-shadow: 0 0 26px rgba(41,196,255,.7); }
+  .fstep .art { order: 3; display: grid; place-items: center; padding-left: clamp(10px, 3vw, 40px); }
+  .fstep:nth-child(even) .ft { order: 3; padding: 0 0 0 clamp(10px, 3vw, 40px); }
+  .fstep:nth-child(even) .art { order: 1; padding: 0 clamp(10px, 3vw, 40px) 0 0; }
+  .fstep .lbl { font-size: .72rem; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); }
+  .fstep h3 { font-family: var(--font-head); font-weight: 700; font-size: clamp(1.4rem, 2.4vw, 1.9rem); letter-spacing: -.015em; margin: 8px 0 12px; }
+  .fstep p { color: var(--muted); font-weight: 300; max-width: 440px; }
+  .art .disc { position: relative; width: min(100%, 210px); aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center; border: 1px solid var(--line); background: radial-gradient(circle at 50% 40%, rgba(41,196,255,.16), rgba(26,115,255,.04) 65%); transition: transform .4s, box-shadow .4s; }
+  .fstep:hover .disc { transform: scale(1.05); box-shadow: 0 0 70px -10px rgba(41,196,255,.55); }
+  .art svg { width: 58%; height: 58%; fill: none; stroke: var(--accent); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+  .final { position: relative; margin-top: clamp(56px, 8vw, 100px); padding: clamp(36px, 6vw, 70px) clamp(24px, 5vw, 64px); border-radius: 28px; text-align: center; overflow: hidden; border: 1px solid rgba(41,196,255,.35); background: radial-gradient(70% 120% at 50% 0%, rgba(26,115,255,.32), transparent 70%), #060c15; }
+  .final h3 { font-family: var(--font-head); font-weight: 700; font-size: clamp(1.7rem, 3.6vw, 2.8rem); letter-spacing: -.02em; }
+  .final p { color: var(--muted); margin: 14px auto 30px; max-width: 520px; font-weight: 300; }
+  .final p b { color: var(--text); font-weight: 500; }
+
+  @media (max-width: 900px) {
+    .infobar { grid-template-columns: repeat(2, 1fr); }
+    .infobar div:nth-child(3) { border-left: 0; }
+    .infobar div:nth-child(n+3) { border-top: 1px solid var(--line); }
+    .tl::before, .tl::after { left: 23px; }
+    .fstep { grid-template-columns: 46px 1fr; column-gap: 20px; align-items: start; }
+    .fstep .node { order: 1; justify-self: start; }
+    .fstep .ft, .fstep:nth-child(even) .ft { order: 2; padding: 0; }
+    .fstep .art, .fstep:nth-child(even) .art { order: 3; grid-column: 2; padding: 22px 0 0; justify-items: start; }
+    .art .disc { width: 150px; }
+  }
+  @media (max-width: 520px) { .infobar { grid-template-columns: 1fr; } .infobar div + div { border-left: 0; border-top: 1px solid var(--line); } }
+
+  /* ---------- Sektion 4: Termine, FAQ, Footer ---------- */
+  .dates { background: linear-gradient(180deg, var(--bg), #060c15 50%, var(--bg)); border-top: 1px solid var(--line); }
+  .dates-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(28px, 5vw, 70px); align-items: stretch; margin-top: 46px; }
+  .ticket { position: relative; display: flex; gap: 28px; align-items: center; padding: clamp(28px, 4vw, 48px); border-radius: 26px; border: 1px solid rgba(41,196,255,.4); background: radial-gradient(90% 120% at 0% 0%, rgba(26,115,255,.30), transparent 65%), #08101b; box-shadow: 0 30px 80px -40px rgba(41,196,255,.6); }
+  .cal { flex: none; width: 118px; text-align: center; border-radius: 18px; overflow: hidden; background: #0d1826; border: 1px solid var(--line); }
+  .cal small { display: block; padding: 8px 0; font-size: .75rem; font-weight: 700; letter-spacing: .22em; background: linear-gradient(135deg, var(--blue), var(--accent)); color: #fff; }
+  .cal b { display: block; font: 800 3.4rem/1.1 var(--font-head); padding-top: 6px; }
+  .cal span { display: block; padding-bottom: 10px; font-size: .8rem; color: var(--muted); }
+  .ticket h3 { font-family: var(--font-head); font-weight: 700; font-size: 1.5rem; letter-spacing: -.01em; }
+  .ticket ul { list-style: none; margin: 14px 0 24px; color: var(--muted); font-weight: 300; }
+  .ticket li { display: flex; gap: 10px; padding: 3px 0; }
+  .ticket li::before { content: ""; flex: none; width: 7px; height: 7px; margin-top: .6em; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+  .book-info { display: grid; gap: 16px; align-content: center; }
+  .bi { display: flex; gap: 18px; padding: 22px 24px; border: 1px solid var(--line); border-radius: 16px; background: rgba(255,255,255,.03); }
+  .bi i { flex: none; width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; font: 700 .9rem var(--font-head); font-style: normal; background: rgba(41,196,255,.12); color: var(--accent); }
+  .bi h4 { font-family: var(--font-head); font-weight: 600; margin-bottom: 4px; }
+  .bi p { color: var(--muted); font-weight: 300; font-size: .95rem; }
+  .bi a { color: var(--accent); border-bottom: 1px solid currentColor; }
+
+  .faq { border-top: 1px solid var(--line); }
+  .faq-wrap { max-width: 860px; margin: 0 auto; }
+  .faq-wrap .kicker { justify-content: center; width: 100%; } .faq-wrap .kicker::before { display: none; }
+  .faq-wrap h2 { text-align: center; margin-bottom: 44px; }
+  details { border-bottom: 1px solid var(--line); }
+  details:first-of-type { border-top: 1px solid var(--line); }
+  summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 24px 4px; font-family: var(--font-head); font-weight: 600; font-size: 1.1rem; transition: color .2s; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; border: 1px solid var(--line); color: var(--accent); font-size: 1.3rem; transition: transform .3s, background .3s; }
+  details[open] summary::after { transform: rotate(45deg); background: rgba(41,196,255,.12); }
+  summary:hover { color: var(--accent); }
+  details p { padding: 0 54px 26px 4px; color: var(--muted); font-weight: 300; }
+
+  .footer { border-top: 1px solid var(--line); padding: 64px clamp(20px, 5vw, 64px) calc(28px + env(safe-area-inset-bottom, 0px)); background: #03060a; }
+  .foot-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 40px; max-width: 1240px; margin: 0 auto; }
+  .foot-grid p { color: var(--muted); font-weight: 300; font-size: .92rem; margin-top: 16px; max-width: 360px; }
+  .foot-grid h5 { font-size: .72rem; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; font-weight: 600; }
+  .foot-grid li { list-style: none; padding: 4px 0; font-size: .92rem; color: var(--muted); }
+  .foot-grid a:hover { color: var(--text); }
+  .foot-bottom { max-width: 1240px; margin: 44px auto 0; padding-top: 24px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font-size: .8rem; color: var(--muted); }
+  .foot-bottom a:hover { color: var(--text); }
+  .foot-bottom .legal a + a::before { content: "|"; margin: 0 12px; color: var(--line); }
+
+  @media (max-width: 900px) { .dates-grid { grid-template-columns: 1fr; } .foot-grid { grid-template-columns: 1fr; } .ticket { flex-direction: column; align-items: flex-start; } }
+  @media (max-width: 520px) { details p { padding-right: 4px; } }
+
+  @media (max-width: 900px) {
+    .burger { display: block; }
+    .header .btn { display: none; }
+    .nav { position: fixed; inset: 0; flex-direction: column; justify-content: center; gap: 28px; background: rgba(4,7,12,.97); opacity: 0; pointer-events: none; transition: opacity .3s; }
+    .nav.open { opacity: 1; pointer-events: auto; }
+    .nav a.link { font-size: 1.15rem; }
+    .hero { align-items: flex-start; padding-top: 110px; padding-bottom: 40px; }
+    .hero-grid { grid-template-columns: 1fr; }
+    .orb-wrap { width: min(80%, 340px); order: -1; margin-bottom: 8px; }
+    .facts { position: static; grid-template-columns: 1fr; margin-top: 44px; gap: 14px; }
+    .hero::after { background: linear-gradient(0deg, var(--bg), transparent 30%); }
+  }
+  @media (prefers-reduced-motion: reduce) { .reveal { animation: none; opacity: 1; transform: none; } .ring, .orb, .badge .dot { animation: none; } }
+</style>
+</head>
+<body>
+
+<header class="header" id="header">
+  <a href="#home" class="logo"><i>9D</i><span>Reset Your Mind<small>9D Breathwork</small></span></a>
+  <nav class="nav" id="nav" aria-label="Hauptmenü">
+    <a class="link" href="#was-ist">Was ist 9D Breathwork?</a>
+    <a class="link" href="#ablauf">Ablauf</a>
+    <a class="link" href="#termine">Termine</a>
+    <a class="link" href="#faq">Fragen</a>
+    <a class="btn primary" href="#buchen" data-book>Session buchen</a>
+  </nav>
+  <button class="burger" id="burger" aria-label="Menü" aria-expanded="false"><span></span><span></span><span></span></button>
+</header>
+
+<main>
+  <section class="hero" id="home">
+    <div class="hero-grid">
+      <div>
+        <div class="badge reveal d1"><span class="dot"></span><span>Nächste Session: <b>31.10.2026 · 13:45 Uhr · YOMA Studio 1, Köln</b></span></div>
+        <h1 class="reveal d2">Reset your mind.<em>9D Breathwork in Köln.</em></h1>
+        <p class="lead reveal d3"><b>Deine Reise beginnt mit einem Atemzug.</b> Eine geführte 9D-Breathwork-Journey in Köln mit bewusster Atmung, immersivem Raumklang und Raum zum Loslassen.</p>
+        <div class="cta reveal d4">
+          <a class="btn primary" href="#buchen" data-book>Jetzt Session buchen</a>
+          <a class="btn ghost" href="#was-ist">So funktioniert’s</a>
+        </div>
+        <p class="trust reveal d4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.4 2.2 3.2-.4 1.2 3 2.8 1.7-.9 3.1.9 3.1-2.8 1.7-1.2 3-3.2-.4L12 22l-2.4-2.2-3.2.4-1.2-3-2.8-1.7.9-3.1-.9-3.1 2.8-1.7 1.2-3 3.2.4z"/><path d="m8.5 12 2.5 2.5 4.5-5" fill="none" stroke="#04070c" stroke-width="2"/></svg>9D Verified Trainer · <span>Reset Your Mind</span></p>
+        <p class="note reveal d4">Breathwork ersetzt keine ärztliche oder therapeutische Behandlung.</p>
+      </div>
+
+      <div class="orb-wrap reveal d3" aria-hidden="true">
+        <div class="ring"></div><div class="ring"></div><div class="ring"></div>
+        <div class="orb"><span id="breath">Einatmen</span></div>
+      </div>
+    </div>
+
+    <div class="facts reveal d4">
+      <div><small>Ort</small><span>YOMA Studio 1, Köln</span></div>
+      <div><small>Format</small><span>Liegend, mit Augenbinde &amp; Kopfhörern</span></div>
+      <div><small>Sound</small><span>Immersiver 9D-Raumklang</span></div>
+    </div>
+  </section>
+
+  <!-- ===== SEKTION 2: Was ist 9D Breathwork? ===== -->
+  <section class="section what" id="was-ist">
+    <div class="wrap">
+      <div class="what-top">
+        <div class="what-text scroll-reveal">
+          <div class="kicker">Was ist 9D Breathwork?</div>
+          <h2>Atmung, Klang und <em>Aufmerksamkeit</em> in einem Erlebnis.</h2>
+          <p><b>9D Breathwork verbindet bewusste Atemtechniken mit einem mehrdimensionalen Sounderlebnis und geführter Visualisierung.</b></p>
+          <p>Du liegst bequem, die Augen sind verbunden, und der Klang bewegt sich aus verschiedenen Richtungen durch den Raum. Das lenkt die Aufmerksamkeit nach innen und lässt dich deine Umgebung für eine Weile vergessen.</p>
+          <a class="btn primary" href="#buchen" data-book>Session buchen</a>
         </div>
 
-        <div id="result" hidden="true" class="card">
-            <div class="card-header">
-                <h1>Quiz beendet!</h1>
-
-            </div>
-            <div class="card-body">
-                   <p>Deine Punktzahl: <span id="score"></span></p>
-
-            </div>
-            <div class="card-footer">
-
-            </div>
-         
-            
+        <div class="space scroll-reveal s2" aria-hidden="true">
+          <div class="glow"></div>
+          <svg viewBox="0 0 400 400">
+            <defs>
+              <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1a73ff"/><stop offset="1" stop-color="#29c4ff"/></linearGradient>
+            </defs>
+            <circle cx="200" cy="200" r="190" fill="none" stroke="rgba(255,255,255,.08)" stroke-dasharray="2 8"/>
+            <circle cx="200" cy="200" r="140" fill="none" stroke="rgba(255,255,255,.1)"/>
+            <circle cx="200" cy="200" r="92" fill="none" stroke="rgba(41,196,255,.35)"/>
+            <g class="orbit o1"><circle cx="200" cy="60" r="9" fill="#29c4ff"/><circle cx="200" cy="60" r="18" fill="none" stroke="#29c4ff" opacity=".4"/></g>
+            <g class="orbit o2"><circle cx="60" cy="200" r="7" fill="#1a73ff"/><circle cx="340" cy="200" r="7" fill="#1a73ff"/></g>
+            <g class="orbit o3"><circle cx="200" cy="10" r="6" fill="#fff" opacity=".8"/><circle cx="200" cy="390" r="6" fill="#fff" opacity=".8"/></g>
+            <!-- Kopf von oben mit Kopfhörern -->
+            <ellipse cx="200" cy="200" rx="40" ry="48" fill="rgba(255,255,255,.07)" stroke="url(#g)" stroke-width="2"/>
+            <path d="M158 188 a52 52 0 0 1 0 24 M242 188 a52 52 0 0 0 0 24" stroke="url(#g)" stroke-width="7" stroke-linecap="round" fill="none"/>
+            <circle cx="200" cy="200" r="10" fill="url(#g)"/>
+          </svg>
+          <div class="cap">Klang aus allen Richtungen</div>
         </div>
-    </body>
+      </div>
 
-   <script src="Quiz.js"></script>
-   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+      <div class="pillars">
+        <article class="pillar scroll-reveal">
+          <span class="no">01</span>
+          <div class="ico"><svg viewBox="0 0 84 84"><circle class="pulse-ring" cx="42" cy="42" r="14"/><circle class="pulse-ring r2" cx="42" cy="42" r="26"/><circle class="pulse-ring r3" cx="42" cy="42" r="38"/></svg></div>
+          <h3>Bewusste Atmung</h3>
+          <p>Angeleitete Atemmuster, die du Schritt für Schritt lernst. Du musst nichts können, du wirst während der gesamten Session geführt.</p>
+        </article>
+        <article class="pillar scroll-reveal s2">
+          <span class="no">02</span>
+          <div class="ico"><svg viewBox="0 0 84 84" stroke-width="3"><line class="wavebar" x1="10" y1="30" x2="10" y2="54"/><line class="wavebar" style="animation-delay:.15s" x1="22" y1="18" x2="22" y2="66"/><line class="wavebar" style="animation-delay:.3s" x1="34" y1="26" x2="34" y2="58"/><line class="wavebar" style="animation-delay:.45s" x1="46" y1="10" x2="46" y2="74"/><line class="wavebar" style="animation-delay:.6s" x1="58" y1="24" x2="58" y2="60"/><line class="wavebar" style="animation-delay:.75s" x1="70" y1="16" x2="70" y2="68"/><line class="wavebar" style="animation-delay:.9s" x1="80" y1="32" x2="80" y2="52"/></svg></div>
+          <h3>9D-Raumklang</h3>
+          <p>Musik und Klänge, die sich aus verschiedenen Richtungen bewegen. Über Kopfhörer entsteht ein immersiver Raum, in dem du dich ganz auf dich konzentrieren kannst.</p>
+        </article>
+        <article class="pillar scroll-reveal s3">
+          <span class="no">03</span>
+          <div class="ico"><svg viewBox="0 0 84 84"><path d="M42 42c0-4 4-6 7-4s3 8-2 10-12-1-12-10 9-15 18-13 15 12 11 22-16 16-27 13S10 52 14 38"/></svg></div>
+          <h3>Geführte Reise</h3>
+          <p>Eine Stimme begleitet dich durch die Session, mit Visualisierungen und Pausen, in denen du einfach nur spüren und ankommen darfst.</p>
+        </article>
+      </div>
+
+      <div class="hint scroll-reveal">
+        <span><b>Gut zu wissen:</b> Breathwork kann intensiv sein und ersetzt keine ärztliche oder therapeutische Behandlung. Bei Vorerkrankungen, Schwangerschaft oder Unsicherheiten sprich bitte vorher mit uns oder deinem Arzt. Mehr dazu in den <a href="#faq">häufigen Fragen</a>.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SEKTION 3: Ablauf ===== -->
+  <section class="section" id="ablauf">
+    <div class="wrap">
+      <div class="flow-head scroll-reveal">
+        <div class="kicker">Der Ablauf</div>
+        <h2>So läuft deine <em>Session</em> ab</h2>
+        <p>Du brauchst keine Vorerfahrung. Von der Ankunft bis zum Ausklang wirst du Schritt für Schritt begleitet.</p>
+      </div>
+
+      <!-- Infos hier bei Bedarf anpassen (z. B. Dauer oder Mitbringliste ergänzen) -->
+      <div class="infobar scroll-reveal">
+        <div><small>Ort</small><span>YOMA Studio 1, Köln</span></div>
+        <div><small>Nächster Start</small><span>31.10.2026 · 13:45 Uhr</span></div>
+        <div><small>Mitbringen</small><span>Bequeme Kleidung</span></div>
+        <div><small>Vorkenntnisse</small><span>Keine nötig</span></div>
+      </div>
+
+      <ol class="tl" id="tl">
+        <li class="fstep">
+          <div class="ft scroll-reveal"><span class="lbl">Schritt 1</span><h3>Buchen &amp; ankommen</h3><p>Du sicherst dir online deinen Platz und kommst am Veranstaltungstag in Ruhe im YOMA Studio an. Wir begrüßen dich persönlich.</p></div>
+          <div class="node">1</div>
+          <div class="art scroll-reveal s2"><div class="disc"><svg viewBox="0 0 120 120"><path d="M32 104V22a6 6 0 0 1 6-6h44a6 6 0 0 1 6 6v82M20 104h80"/><circle cx="74" cy="62" r="2.5" fill="currentColor"/><path d="M96 40l8 8 14-16" transform="translate(-6 -2) scale(.9)"/></svg></div></div>
+        </li>
+        <li class="fstep">
+          <div class="ft scroll-reveal"><span class="lbl">Schritt 2</span><h3>Kurze Einführung</h3><p>Du erfährst, was in der Session passiert, wie die Atmung funktioniert und worauf du achten kannst. Fragen sind jederzeit willkommen.</p></div>
+          <div class="node">2</div>
+          <div class="art scroll-reveal s2"><div class="disc"><svg viewBox="0 0 120 120"><path d="M24 26h72a8 8 0 0 1 8 8v40a8 8 0 0 1-8 8H58l-20 18V82H24a8 8 0 0 1-8-8V34a8 8 0 0 1 8-8z"/><path d="M36 48h48M36 62h30"/></svg></div></div>
+        </li>
+        <li class="fstep">
+          <div class="ft scroll-reveal"><span class="lbl">Schritt 3</span><h3>Bequem hinlegen</h3><p>Du legst dich auf deine Matte, setzt Augenbinde und Kopfhörer auf und richtest dich so ein, dass du dich wohlfühlst.</p></div>
+          <div class="node">3</div>
+          <div class="art scroll-reveal s2"><div class="disc"><svg viewBox="0 0 120 120"><rect x="12" y="80" width="96" height="12" rx="6"/><circle cx="30" cy="62" r="10"/><path d="M44 68h56"/><path d="M24 58h12" stroke-width="4"/></svg></div></div>
+        </li>
+        <li class="fstep">
+          <div class="ft scroll-reveal"><span class="lbl">Schritt 4</span><h3>Die Atemreise</h3><p>Eine Stimme führt dich durch die Atmung, während der 9D-Sound um dich herum in Bewegung ist. Du folgst einfach dem Rhythmus und lässt geschehen.</p></div>
+          <div class="node">4</div>
+          <div class="art scroll-reveal s2"><div class="disc"><svg viewBox="0 0 120 120"><path d="M24 70a36 36 0 0 1 72 0"/><rect x="16" y="66" width="16" height="30" rx="8"/><rect x="88" y="66" width="16" height="30" rx="8"/><g stroke-width="3"><line class="wavebar" x1="46" y1="70" x2="46" y2="90"/><line class="wavebar" style="animation-delay:.2s" x1="56" y1="60" x2="56" y2="100"/><line class="wavebar" style="animation-delay:.4s" x1="66" y1="66" x2="66" y2="94"/><line class="wavebar" style="animation-delay:.6s" x1="76" y1="72" x2="76" y2="88"/></g></svg></div></div>
+        </li>
+        <li class="fstep">
+          <div class="ft scroll-reveal"><span class="lbl">Schritt 5</span><h3>Ausklang &amp; Ankommen</h3><p>Nach der Reise bekommst du Zeit, langsam zurückzukommen. Wenn du magst, tauschst du dich mit der Gruppe aus.</p></div>
+          <div class="node">5</div>
+          <div class="art scroll-reveal s2"><div class="disc"><svg viewBox="0 0 120 120"><path d="M14 84h92"/><path d="M34 84a26 26 0 0 1 52 0"/><path d="M60 38V24M36 48l-9-9M84 48l9-9M24 66H12M96 66h12"/><circle class="pulse-ring" cx="60" cy="84" r="40" stroke-width="1" opacity=".5"/></svg></div></div>
+        </li>
+      </ol>
+
+      <div class="final scroll-reveal">
+        <h3>Bereit für deine erste Reise?</h3>
+        <p><b>Nächste Session: 31.10.2026 · 13:45 Uhr</b><br>YOMA Studio 1, Köln</p>
+        <a class="btn primary" href="#buchen" data-book>Platz sichern</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SEKTION 4a: Termine ===== -->
+  <section class="section dates" id="termine">
+    <div class="wrap">
+      <div class="scroll-reveal" style="max-width:720px">
+        <div class="kicker">Termine &amp; Buchung</div>
+        <h2>Sichere dir deinen <em>Platz</em></h2>
+      </div>
+      <div class="dates-grid">
+        <div class="ticket scroll-reveal">
+          <div class="cal"><small>SA</small><b>31</b><span>Oktober 2026</span></div>
+          <div>
+            <h3>9D Breathwork Journey</h3>
+            <ul>
+              <li>13:45 Uhr</li>
+              <li>YOMA Studio 1, Köln</li>
+              <li>Geführt von einem 9D Verified Trainer</li>
+            </ul>
+            <a class="btn primary" href="#buchen" data-book>Platz sichern</a>
+          </div>
+        </div>
+        <div class="book-info">
+          <div class="bi scroll-reveal"><i>1</i><div><h4>Online buchen</h4><p>Die Buchung läuft sicher über unseren Partner rausgegangen. Dort siehst du auch Preis und freie Plätze.</p></div></div>
+          <div class="bi scroll-reveal s2"><i>2</i><div><h4>Bestätigung erhalten</h4><p>Du bekommst deine Buchungsbestätigung direkt von der Buchungsplattform.</p></div></div>
+          <div class="bi scroll-reveal s3"><i>3</i><div><h4>Weitere Termine</h4><p>Neue Sessions kündigen wir auf Instagram an: <a href="https://www.instagram.com/_resetyourmind/" target="_blank" rel="noopener">@_resetyourmind</a></p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SEKTION 4b: FAQ ===== -->
+  <section class="section faq" id="faq">
+    <div class="faq-wrap">
+      <div class="scroll-reveal"><div class="kicker">Häufige Fragen</div><h2>Gut zu <em>wissen</em></h2></div>
+      <div class="scroll-reveal">
+        <details><summary>Brauche ich Vorerfahrung?</summary><p>Nein. Die Session ist für Einsteiger geeignet. Du wirst von der ersten bis zur letzten Minute angeleitet.</p></details>
+        <details><summary>Was passiert in einer Session?</summary><p>Nach einer kurzen Einführung legst du dich bequem hin, setzt Augenbinde und Kopfhörer auf und wirst durch eine geführte Atemreise mit 9D-Sound begleitet. Den genauen Ablauf findest du oben unter <a href="#ablauf" style="color:var(--accent)">„Der Ablauf“</a>.</p></details>
+        <details><summary>Ist 9D Breathwork für jeden geeignet?</summary><p>Nicht unbedingt. Bei Vorerkrankungen, zum Beispiel des Herz-Kreislauf-Systems, bei Epilepsie, Schwangerschaft oder psychischen Erkrankungen, hole bitte vorher ärztlichen Rat ein und sprich uns an. Im Zweifel gilt: lieber einmal mehr nachfragen.</p></details>
+        <details><summary>Kann es emotional werden?</summary><p>Atemarbeit kann intensive Körperempfindungen und Gefühle auslösen. Das gehört dazu. Du bestimmst dein Tempo selbst und kannst jederzeit langsamer atmen oder pausieren. Wenn dir etwas zu viel wird, sag unserem Trainer Bescheid.</p></details>
+        <details><summary>Ersetzt Breathwork eine Therapie?</summary><p>Nein. Unser Angebot ist keine medizinische oder psychotherapeutische Behandlung und ersetzt keinen Arzt- oder Therapeutenbesuch.</p></details>
+        <details><summary>Wie buche oder storniere ich?</summary><p>Die Buchung erfolgt über die Plattform rausgegangen. Dort findest du auch die geltenden Buchungs- und Stornierungsbedingungen.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="foot-grid">
+    <div>
+      <a href="#home" class="logo"><i>9D</i><span>Reset Your Mind<small>9D Breathwork</small></span></a>
+      <p>Geführte 9D-Breathwork-Sessions in Köln. Deine Reise beginnt mit einem Atemzug.</p>
+    </div>
+    <div>
+      <h5>Seite</h5>
+      <ul><li><a href="#was-ist">Was ist 9D Breathwork?</a></li><li><a href="#ablauf">Ablauf</a></li><li><a href="#termine">Termine</a></li><li><a href="#faq">Fragen</a></li></ul>
+    </div>
+    <div>
+      <h5>Kontakt</h5>
+      <ul><li><a href="https://www.instagram.com/_resetyourmind/" target="_blank" rel="noopener">Instagram @_resetyourmind</a></li><li><a href="#buchen" data-book>Session buchen</a></li></ul>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2026 Reset Your Mind</span>
+    <span class="legal"><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a></span>
+  </div>
+</footer>
+
+<script>
+  // Buchungslink (aus deinem Instagram-Profil). Hier kannst du ihn jederzeit austauschen.
+  var BOOKING_URL = 'https://rausgegangen.de/events/9d-breathwork-journey-koeln-0';
+
+  document.querySelectorAll('[data-book]').forEach(function (a) {
+    a.setAttribute('href', BOOKING_URL);
+    if (/^https?:/.test(BOOKING_URL)) { a.target = '_blank'; a.rel = 'noopener'; }
+  });
+
+  var header = document.getElementById('header');
+  function onScroll() { header.classList.toggle('scrolled', window.scrollY > 40); }
+  window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+  var burger = document.getElementById('burger'), nav = document.getElementById('nav');
+  burger.addEventListener('click', function () {
+    var open = nav.classList.toggle('open');
+    burger.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', open);
+  });
+  nav.querySelectorAll('a').forEach(function (a) {
+    a.addEventListener('click', function () { nav.classList.remove('open'); burger.classList.remove('open'); burger.setAttribute('aria-expanded', 'false'); });
+  });
+
+  // Atem-Anzeige im Takt der Animation (4 s ein, 4 s aus)
+  var breath = document.getElementById('breath'), inhale = true;
+  setInterval(function () {
+    inhale = !inhale;
+    breath.style.opacity = 0;
+    setTimeout(function () { breath.textContent = inhale ? 'Einatmen' : 'Ausatmen'; breath.style.opacity = 1; }, 300);
+  }, 4000);
+
+  // Einblenden beim Scrollen
+  var items = document.querySelectorAll('.scroll-reveal');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.15 });
+    items.forEach(function (el) { io.observe(el); });
+  } else { items.forEach(function (el) { el.classList.add('in'); }); }
+
+  // Zeitleiste füllt sich beim Scrollen
+  var tl = document.getElementById('tl'), fsteps = tl.querySelectorAll('.fstep');
+  function updateTl() {
+    var r = tl.getBoundingClientRect(), mid = window.innerHeight * 0.55;
+    var p = Math.max(0, Math.min(1, (mid - r.top) / r.height));
+    tl.style.setProperty('--p', p);
+    fsteps.forEach(function (f) {
+      var n = f.querySelector('.node').getBoundingClientRect();
+      f.classList.toggle('on', n.top + n.height / 2 < mid);
+    });
+  }
+  window.addEventListener('scroll', updateTl, { passive: true });
+  window.addEventListener('resize', updateTl);
+  updateTl();
+</script>
+</body>
 </html>
